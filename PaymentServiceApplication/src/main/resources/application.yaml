@@ -1,0 +1,20 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: PaymentServiceApplication
+  datasource:
+    url: jdbc:mysql://localhost:3306/shoppingstore
+    username: admin
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mysql:
+    url: jdbc:mysql://localhost:3306/shoppingstore
+    username: admin
+    password: root
+
