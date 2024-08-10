@@ -12,8 +12,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
   mysql:
     url: jdbc:mysql://localhost:3306/shoppingstore
     username: admin
     password: root
+jwt:
+  secret: mySecretKey
+  expirationMs: 3600000  # 1 hora

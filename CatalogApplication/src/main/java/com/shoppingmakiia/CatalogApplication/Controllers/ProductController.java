@@ -14,12 +14,12 @@ public class ProductController {
         this.repository = repository;
     }
 
-    @GetMapping("/productos")
+    @GetMapping("/products")
     public List<Product> getProductos() {
         return repository.findAll();
     }
 
-    @GetMapping("/producto")
+    @GetMapping("/product")
     public Product getProducto(@RequestParam Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Product Not Found"));
     }
