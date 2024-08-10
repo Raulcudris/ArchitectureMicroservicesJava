@@ -1,31 +1,40 @@
 package com.shoppingmakiia.PaymentServiceApplication.Controller;
-
-
 import com.shoppingmakiia.PaymentServiceApplication.Entity.Pay;
-import com.shoppingmakiia.PaymentServiceApplication.Repository.PayRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.shoppingmakiia.PaymentServiceApplication.Service.PayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/pay")
 public class PayController {
+    @Autowired
+    PayService payService;
 
-    private PayRepository repository;
-
-    PayController(PayRepository repository) {
-        this.repository = repository;
+    @GetMapping("getall")
+    public ResponseEntity<List<Pay>> getAll(){
+        List<Pay> products = payService.getAll();
+        if(products.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/pagos")
-    public List<Pay> getPagos() {
-        return repository.findAll();
+    @GetMapping("/{id}")
+    public ResponseEntity<Pay> getById(@PathVariable("id") Long id){
+        Pay pay = payService.getPayById(id);
+        if(pay == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(pay);
     }
 
-    @GetMapping("/pago")
-    public Pay getPago(@RequestParam Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Pay not found"));
+    @PostMapping("create")
+    public ResponseEntity<Pay> save(@RequestBody Pay pay){
+        Pay payNew = payService.save(pay);
+        return ResponseEntity.ok(payNew);
     }
 
 

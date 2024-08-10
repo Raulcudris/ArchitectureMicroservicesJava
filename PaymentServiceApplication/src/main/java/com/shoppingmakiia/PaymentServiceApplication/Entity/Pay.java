@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.security.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +22,5 @@ public class Pay {
     private Long usuarioId;
     private BigDecimal monto;
     private String metodoPago;
-    private Timestamp fecha;
+    private LocalDate fecha;
 }
