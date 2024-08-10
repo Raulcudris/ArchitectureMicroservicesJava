@@ -21,6 +21,7 @@ public class AuthUserService {
     PasswordEncoder passwordEncoder;
     @Autowired
     JwtProvider jwtProvider;
+
     public AuthRequest save(NewUserDto dto) {
         Optional<AuthRequest> user = authUserRepository.findByUsername(dto.getUserName());
         if(user.isPresent())

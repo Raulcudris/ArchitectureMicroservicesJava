@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     @Autowired
     AuthUserService authUserService;
-
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody AuthUserDto dto){
         TokenDto tokenDto = authUserService.login(dto);
