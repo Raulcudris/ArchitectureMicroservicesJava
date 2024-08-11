@@ -17,5 +17,5 @@ public class CartProduct {
     private Long id;
     private Long carritoId;
     private Long productoId;
-    private Integer cantidad;
+    private Long cantidad;
 }
