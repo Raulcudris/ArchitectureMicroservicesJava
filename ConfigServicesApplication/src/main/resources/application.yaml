@@ -5,8 +5,8 @@ Spring:
     config:
       server:
         git:
-          default-label: auth-jwt-role
+          default-label: CustomerServices
           uri: https://github.com/Raulcudris/ArchitectureMicroservicesJava.git
           search-paths: config-data
   application:
-    name: config-service
+    name: Config-Services

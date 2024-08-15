@@ -4,7 +4,7 @@ spring:
       enabled: true
       uri: http://localhost:8081
   application:
-    name: Auth-Services
+    name: Customer-Services
   datasource:
     url: jdbc:mysql://localhost:3306/shoppingstore
     username: admin
@@ -14,6 +14,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
-jwt:
-  secret: 7639848111F24212121B445421S545125D4212S5451A51115155151100000055051
-  expirationMs: 604800
