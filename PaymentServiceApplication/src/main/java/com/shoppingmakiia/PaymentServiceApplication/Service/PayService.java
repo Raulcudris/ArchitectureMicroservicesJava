@@ -13,14 +13,11 @@ public class PayService {
     public List<Pay> getAll(){
         return  payRepository.findAll();
     }
-
     public Pay getPayById( Long id){
         return payRepository.findById(id).orElse(null);
     }
-
     public Pay save(Pay pay){
         Pay productNew = payRepository.save(pay);
         return productNew;
     }
-
 }

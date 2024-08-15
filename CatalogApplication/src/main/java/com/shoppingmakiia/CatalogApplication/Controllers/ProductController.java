@@ -1,43 +1,51 @@
 package com.shoppingmakiia.CatalogApplication.Controllers;
 import com.shoppingmakiia.CatalogApplication.Dto.ProductDto;
 import com.shoppingmakiia.CatalogApplication.Entity.Product;
-import com.shoppingmakiia.CatalogApplication.Repository.ProductRepository;
 import com.shoppingmakiia.CatalogApplication.Service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    @Autowired
-    ProductService productService;
+     @Autowired
+     ProductService productService;
 
     @GetMapping("getall")
-    public ResponseEntity<List<Product>> getAll(){
-        List<Product> products = productService.getAll();
-        if(products.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(products);
+    public List<ProductDto> getAll(){
+        return productService.getAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable("id") Long id){
-        Product product = productService.getBikeById(id);
-        if(product == null){
+    public ResponseEntity<ProductDto> getById(@PathVariable("id") Long id){
+        Product product = productService.getProductById(id);
+        if (product == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(convertToDto(product));
+    }
+    @PostMapping("create")
+    public ResponseEntity<ProductDto> save(@RequestBody ProductDto productDto){
+        Product product = convertToEntity(productDto);
+        Product savedProduct = productService.save(product);
+        return ResponseEntity.ok(convertToDto(savedProduct));
     }
 
-
-    @PostMapping("create")
-    public ResponseEntity<Product> save(@RequestBody Product product){
-        Product productNew = productService.save(product);
-        return ResponseEntity.ok(productNew);
+    private ProductDto convertToDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(product, productDto);
+        return productDto;
+    }
+    private Product convertToEntity(ProductDto productDto) {
+        Product product = new Product();
+        BeanUtils.copyProperties(productDto, product);
+        return product;
     }
 
 }

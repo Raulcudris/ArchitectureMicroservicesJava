@@ -16,14 +16,12 @@ public class CartProductService {
         return  cartProductRepository.findAll();
     }
 
-    public CartProduct getCartProductById( Long id){
-        //return cartProductRepository.findByCarProductId(id);
-        return null;
+    public CartProduct getCartProductById(Long id){
+        return cartProductRepository.findByCarProductId(id);
     }
 
     public CartProduct save(CartProduct cartProduct){
         CartProduct productNew = cartProductRepository.save(cartProduct);
         return productNew;
     }
-
 }
