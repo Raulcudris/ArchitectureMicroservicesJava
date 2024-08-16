@@ -33,5 +33,4 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(authUser);
     }
-
 }
