@@ -31,13 +31,11 @@ public class JwtProvider {
         claims = Jwts.claims().setSubject(authRequest.getUsername());
         claims.put("id", authRequest.getId());
         claims.put("role",authRequest.getRole());
-        Date now = new Date();
-        Date exp = new Date(now.getTime() + timeExpiration);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(exp)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+Long.parseLong(timeExpiration)))
                 .signWith(getSignatureKey(),SignatureAlgorithm.HS256)
                 .compact();
     }
