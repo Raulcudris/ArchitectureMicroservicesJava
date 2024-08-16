@@ -4,7 +4,7 @@ spring:
       enabled: true
       uri: http://localhost:8081
   application:
-    name: Payment-Service
+    name: Payment-Services
   datasource:
     url: jdbc:mysql://localhost:3306/shoppingstore
     username: admin
