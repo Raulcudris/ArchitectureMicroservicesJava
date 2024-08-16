@@ -15,5 +15,5 @@ spring:
       ddl-auto: update
     show-sql: false
 jwt:
-  secret: 7639848111F24212121B445421S545125D4212S5451A51115155151100000055051
+  secret: secret
   expirationMs: 604800
