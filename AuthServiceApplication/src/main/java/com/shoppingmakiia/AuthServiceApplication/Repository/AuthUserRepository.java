@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface AuthUserRepository extends JpaRepository<AuthRequest, Integer> {
 
-    String FILTER_USERNAME_QUERY = "SELECT c FROM EntyRecmaeagendahma c  WHERE c.recSecregReat  = :username";
+    String FILTER_USERNAME_QUERY = "SELECT c FROM AuthRequest c  WHERE c.username  = :username";
     @Query(value = FILTER_USERNAME_QUERY)
     Optional<AuthRequest> findByUsername(@Param("username") String username);
 }
