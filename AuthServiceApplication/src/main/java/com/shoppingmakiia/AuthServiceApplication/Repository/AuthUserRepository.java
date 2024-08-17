@@ -1,8 +1,11 @@
 package com.shoppingmakiia.AuthServiceApplication.Repository;
 import com.shoppingmakiia.AuthServiceApplication.Entity.AuthRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-public interface AuthUserRepository extends JpaRepository<AuthRequest, Long> {
+import java.util.Optional;
+@Repository
+public interface AuthUserRepository extends JpaRepository<AuthRequest, Integer> {
+
     Optional<AuthRequest> findByUsername(String username);
 }

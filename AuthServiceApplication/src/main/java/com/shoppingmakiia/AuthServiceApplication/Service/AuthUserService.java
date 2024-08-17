@@ -9,6 +9,7 @@ import com.shoppingmakiia.AuthServiceApplication.Security.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -17,28 +18,27 @@ import java.util.Optional;
 public class AuthUserService {
     @Autowired
     AuthUserRepository authUserRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
     @Autowired
     JwtProvider jwtProvider;
-
     public AuthRequest save(NewUserDto dto) {
-        Optional<AuthRequest> user = authUserRepository.findByUsername(dto.getUserName());
+        Optional<AuthRequest> user = authUserRepository.findByUsername(dto.getUsername());
         if(user.isPresent())
             return null;
         String password = passwordEncoder.encode(dto.getPassword());
+        LocalDate localDateNow = LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         AuthRequest authUser = AuthRequest.builder()
-                .username(dto.getUserName())
+                .username(dto.getUsername())
                 .password(password)
                 .role(dto.getRole())
+                .email(dto.getEmail())
+                .fecha(localDateNow)
                 .build();
         return authUserRepository.save(authUser);
     }
-
     public TokenDto login(AuthUserDto dto) {
-        Optional<AuthRequest> user = authUserRepository.findByUsername(dto.getUserName());
+        Optional<AuthRequest> user = authUserRepository.findByUsername(dto.getUsername());
         if(!user.isPresent())
             return null;
         if(passwordEncoder.matches(dto.getPassword(), user.get().getPassword()))
@@ -54,5 +54,4 @@ public class AuthUserService {
             return null;
         return new TokenDto(token);
     }
-
 }

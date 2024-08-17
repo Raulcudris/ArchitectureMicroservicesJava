@@ -3,13 +3,10 @@ import com.shoppingmakiia.AuthServiceApplication.Dto.RequestDto;
 import com.shoppingmakiia.AuthServiceApplication.Entity.AuthRequest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +19,6 @@ public class JwtProvider {
     private String secret;
     @Autowired
     RouteValidator routeValidator;
-
     @PostConstruct
     protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());

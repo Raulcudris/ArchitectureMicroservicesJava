@@ -13,13 +13,12 @@ import java.time.LocalDate;
 @Builder
 @Entity
 public class AuthRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
-    @Column(nullable = false)
     private String password;
-    @Column(nullable = false, unique = true)
     private String email;
     private LocalDate fecha;
     private String role;
