@@ -20,35 +20,31 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.timeExpiration}")
-    private String timeExpiration;
     @Autowired
     RouteValidator routeValidator;
 
-    //Generate token of access
+    @PostConstruct
+    protected void init() {
+        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+    }
     public String createToken(AuthRequest authRequest) {
         Map<String, Object> claims = new HashMap<>();
         claims = Jwts.claims().setSubject(authRequest.getUsername());
         claims.put("id", authRequest.getId());
         claims.put("role",authRequest.getRole());
-
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + 3600000);
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+Long.parseLong(timeExpiration)))
-                .signWith(getSignatureKey(),SignatureAlgorithm.HS256)
+                .setIssuedAt(now)
+                .setExpiration(exp)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     public boolean validate(String token, RequestDto dto) {
         try {
-            Jwts.parser().setSigningKey(getSignatureKey()).parseClaimsJws(token);
-             /* Jwts.builder()
-                    .setSubject(username)
-                    .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis()+Long.parseLong(timeExpiration)))
-                    .signWith((java.security.Key) getSignatureKey(), SignatureAlgorithm.HS256)
-                    .compact();*/
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
         }catch (Exception e){
             return false;
         }
@@ -69,10 +65,4 @@ public class JwtProvider {
     private boolean isAdmin(String token){
         return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().get("role").equals("admin");
     }
-
-    public SecretKey getSignatureKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
 }

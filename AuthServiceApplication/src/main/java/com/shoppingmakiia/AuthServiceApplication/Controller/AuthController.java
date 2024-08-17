@@ -14,19 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired
     AuthUserService authUserService;
+
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody AuthUserDto dto){
         TokenDto tokenDto = authUserService.login(dto);
         if(tokenDto == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(tokenDto);
-    }
-    @PostMapping("/register")
-    public ResponseEntity<AuthRequest> create(@RequestBody NewUserDto dto){
-        AuthRequest authUser = authUserService.save(dto);
-        if(authUser == null)
-            return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(authUser);
     }
 
     @PostMapping("/validate")
@@ -36,5 +30,14 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(tokenDto);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthRequest> create(@RequestBody NewUserDto dto){
+        AuthRequest authRequest = authUserService.save(dto);
+        if(authRequest == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(authRequest);
+    }
+
 
 }

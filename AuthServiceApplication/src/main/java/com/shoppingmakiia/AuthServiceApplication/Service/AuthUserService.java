@@ -17,8 +17,10 @@ import java.util.Optional;
 public class AuthUserService {
     @Autowired
     AuthUserRepository authUserRepository;
+
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     JwtProvider jwtProvider;
 
@@ -27,14 +29,10 @@ public class AuthUserService {
         if(user.isPresent())
             return null;
         String password = passwordEncoder.encode(dto.getPassword());
-        LocalDate localDateNow = LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-
         AuthRequest authUser = AuthRequest.builder()
                 .username(dto.getUserName())
                 .password(password)
                 .role(dto.getRole())
-                .fecha(localDateNow)
-                .email(dto.getEmail())
                 .build();
         return authUserRepository.save(authUser);
     }

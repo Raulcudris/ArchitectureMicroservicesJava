@@ -3,7 +3,6 @@ import com.shoppingmakiia.CustomerServicesApplication.Entity.Customer;
 import com.shoppingmakiia.CustomerServicesApplication.Repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
