@@ -41,10 +41,11 @@ public class JwtProvider {
     public boolean validate(String token, RequestDto dto) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+
         }catch (Exception e){
             return false;
         }
-         if(!isAdmin(token) && routeValidator.isAdminPath(dto))
+        if(!isAdmin(token) && routeValidator.isAdminPath(dto))
             return false;
         return true;
 

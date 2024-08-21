@@ -21,5 +21,9 @@ jwt:
 
 admin-paths:
   paths:
-    - uri: "/customer"
+    -
+      uri: "/customer"
       method: "POST"
+    -
+      uri: "/customer/{1}"
+      method: "GET"

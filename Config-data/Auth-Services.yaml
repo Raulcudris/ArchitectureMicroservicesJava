@@ -9,9 +9,19 @@ eureka:
       default-zone: http://localhost:8761/eureka
 
 admin-paths:
-    paths:
-        - uri: "/customer"
-          method: "POST"
+  paths:
+    -
+      uri: "/customer"
+      method: "POST"
+    -
+      uri: "/customer/{1}"
+      method: "GET"
+
+
+#admin-paths:
+    #paths:
+        #- uri: "/customer"
+          #method: "POST"
       #- uri: "/user/savecar/{1}[0-9]+"
         #method: "POST"
       #- uri: "/user/savebike/{1}[0-9]+"
