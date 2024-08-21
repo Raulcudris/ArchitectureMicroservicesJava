@@ -10,6 +10,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
 @Component
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> {
     private WebClient.Builder webClient;
@@ -31,7 +32,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             }
             return webClient.build()
                     .post()
-                    .uri("http://Auth-Services/auth/validate?token="+chunks[1])
+                    .uri("http://localhost:8001/auth/validate?token="+chunks[1])
                     .bodyValue(new RequestDto(exchange.getRequest().getPath().toString(), exchange.getRequest().getMethod().toString()))
                     .retrieve().bodyToMono(TokenDto.class)
                     .map( t->{
