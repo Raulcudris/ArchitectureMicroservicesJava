@@ -41,7 +41,6 @@ public class JwtProvider {
     public boolean validate(String token, RequestDto dto) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-
         }catch (Exception e){
             return false;
         }
