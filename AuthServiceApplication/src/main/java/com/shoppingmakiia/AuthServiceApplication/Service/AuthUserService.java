@@ -44,7 +44,6 @@ public class AuthUserService {
             return new TokenDto(jwtProvider.createToken(user.get()));
         return null;
     }
-
     public TokenDto validate(String token, RequestDto dto) {
         if(!jwtProvider.validate(token,dto))
             return null;
