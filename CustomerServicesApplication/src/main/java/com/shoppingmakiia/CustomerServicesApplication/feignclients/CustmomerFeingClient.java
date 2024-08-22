@@ -9,7 +9,7 @@ import java.util.List;
 
 @FeignClient(name = "Customer-Services")
 @RequestMapping("/customer")
-public interface CustmomerFeingClient {
+public interface o {
     @PostMapping("create")
     CustomerDto saveCustomer(@RequestBody CustomerDto customer);
     @GetMapping("{userId}")
