@@ -35,7 +35,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 
             return webClient.build()
                     .post()
-                    .uri("http://localhost:8007/auth/validate?token=" + chunks[1])
+                    .uri("http://Auth-Services/auth/validate?token=" + chunks[1])
                     .bodyValue(new RequestDto(exchange.getRequest().getPath().toString(), exchange.getRequest().getMethod().toString()))
                     .retrieve()
                     .onStatus(HttpStatus::isError, clientResponse -> {
