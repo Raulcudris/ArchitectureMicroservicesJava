@@ -1,6 +1,5 @@
 server:
-  #port: ${PORT:${SERVER_PORT:0}}
-  port: 8001
+  port: ${PORT:${SERVER_PORT:0}}
 eureka:
   client:
     fetch-registry: true
@@ -13,7 +12,7 @@ eureka:
 admin-paths:
   paths:
     -
-      uri: "/customer/create"
+      uri: "/customer/**"
       method: "POST"
     -
       uri: "/customer/{1}"

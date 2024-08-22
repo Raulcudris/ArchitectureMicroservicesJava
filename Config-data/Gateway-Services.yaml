@@ -1,5 +1,5 @@
 server:
-  port: 8007
+  port: 8080
   
 eureka:
   client:
@@ -11,7 +11,7 @@ eureka:
     hostname: localhost
 
 spring:
-  cloud:    
+  cloud:
     gateway:
       discovery:
         locator:
@@ -23,25 +23,19 @@ spring:
             - Path=/customer/**
           filters:
             - AuthFilter
-        
         - id: Cart-Services
           uri: lb://Cart-Services
           predicates:
             - Path=/cart/**
-        
         - id: Catalog-Services
           uri: lb://Catalog-Services
           predicates:
             - Path=/product/**
-
-        - id: Payment-Services
-          uri: lb://Payment-Services
-          predicates:
-            - Path=/pay/**
-
         - id: Auth-Services
           uri: lb://Auth-Services
           predicates:
             - Path=/auth/**
-
-
+        - id: Payment-Services
+          uri: lb://Payment-Services
+          predicates:
+            - Path=/pay/**

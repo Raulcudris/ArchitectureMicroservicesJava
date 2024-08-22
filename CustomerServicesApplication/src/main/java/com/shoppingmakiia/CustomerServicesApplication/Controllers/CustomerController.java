@@ -30,10 +30,10 @@ public class CustomerController {
         return ResponseEntity.ok(convertToDto(product));
     }
     @PostMapping("create")
-    public ResponseEntity<CustomerDto> save(@RequestBody CustomerDto productDto){
-        Customer product = convertToEntity(productDto);
-        Customer savedProduct = customerService.save(product);
-        return ResponseEntity.ok(convertToDto(savedProduct));
+    public ResponseEntity<CustomerDto> save(@RequestBody CustomerDto customerDto){
+        Customer customer = convertToEntity(customerDto);
+        Customer savedCustomer = customerService.save(customer);
+        return ResponseEntity.ok(convertToDto(savedCustomer));
     }
 
     private CustomerDto convertToDto(Customer customer) {
