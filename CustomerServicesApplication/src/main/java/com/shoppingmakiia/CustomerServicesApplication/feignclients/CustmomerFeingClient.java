@@ -6,11 +6,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@FeignClient(name = "Customer-Services")
-@RequestMapping("/customer")
+@FeignClient(name = "Customer-Services", url = "http://Customer-Services")
 public interface CustmomerFeingClient {
-    @PostMapping("create")
+    @PostMapping("/customer/create")
     Customer saveCustomer(@RequestBody Customer customer);
-    @GetMapping("{userId}")
+    @GetMapping("/customer/{userId}")
     List<Customer> getCustomerId(@PathVariable("id") Long id);
 }
