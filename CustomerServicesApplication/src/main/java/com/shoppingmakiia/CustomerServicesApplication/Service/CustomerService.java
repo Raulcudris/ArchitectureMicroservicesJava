@@ -1,6 +1,8 @@
 package com.shoppingmakiia.CustomerServicesApplication.Service;
+import com.shoppingmakiia.CustomerServicesApplication.Config.RestTemplateConfig;
 import com.shoppingmakiia.CustomerServicesApplication.Entity.Customer;
 import com.shoppingmakiia.CustomerServicesApplication.Repository.CustomerRepository;
+import com.shoppingmakiia.CustomerServicesApplication.feignclients.CustmomerFeingClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -9,6 +11,10 @@ import java.util.List;
 public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    RestTemplateConfig restTemplate;
+    @Autowired
+    CustmomerFeingClient custmomerFeingClient;
 
     public List<Customer> getAll(){
         return  customerRepository.findAll();
@@ -19,9 +25,18 @@ public class CustomerService {
         return  customerId;
     }
 
-    public Customer save(Customer product){
-        Customer productNew = customerRepository.save(product);
+    public Customer save(Customer customer){
+        Customer productNew = customerRepository.save(customer);
         return productNew;
     }
 
+    public List<Customer> getCustomerIdFeingClient (Long customerId){
+        List<Customer> customers = restTemplate.restTemplate().getForObject("http://Customer-Services/customer/"+customerId,List.class);
+        return  customers;
+    }
+
+    public  Customer saveCustomerFeingClient(Customer customer){
+        Customer customerNew = custmomerFeingClient.saveCustomer(customer);
+        return  customerNew;
+    }
 }
