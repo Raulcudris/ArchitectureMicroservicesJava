@@ -2,6 +2,9 @@ spring:
   application:
     name: Gateway-Services
   cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
     config:
       enabled: true
       uri: http://localhost:8081
