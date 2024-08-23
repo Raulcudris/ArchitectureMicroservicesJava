@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name = "Customer-Services")
-@RequestMapping("/customer")
 public interface CustmomerFeingClient {
-    @PostMapping("/create")
+    @PostMapping("/customer/create")
     Customer saveCustomer(@RequestBody Customer customer);
-    @GetMapping("/{userId}")
+    @GetMapping("/customer/{userId}")
     List<Customer> getCustomerId(@PathVariable("id") Long id);
 }
