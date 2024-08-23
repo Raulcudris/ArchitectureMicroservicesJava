@@ -13,8 +13,25 @@ public class CustomerService {
     CustomerRepository customerRepository;
     @Autowired
     RestTemplateConfig restTemplate;
-    @Autowired
+
     CustmomerFeingClient custmomerFeingClient;
+    public CustomerService(){
+          this.custmomerFeingClient = new CustmomerFeingClient() {
+            @Override
+            public Customer saveCustomer(Customer customer) {
+                Customer customerNew = custmomerFeingClient.saveCustomer(customer);
+                return  customerNew;
+            }
+
+            @Override
+            public List<Customer> getCustomerId(Long id) {
+                List<Customer> customer = custmomerFeingClient.getCustomerId(id);
+                return  customer;
+            }
+        };
+
+
+    }
 
     public List<Customer> getAll(){
         return  customerRepository.findAll();
@@ -30,19 +47,10 @@ public class CustomerService {
         return productNew;
     }
 
-    public List<Customer> getCustomerIdFeingClient (Long customerId){
+    /*public List<Customer> getCustomerIdFeingClient (Long customerId){
         List<Customer> customers = restTemplate.restTemplate().getForObject("http://Customer-Services/customer/"+customerId,List.class);
         return  customers;
-    }
+    }*/
 
-    public Customer saveCustomerFeingClient(Customer customer){
-        Customer customerNew = custmomerFeingClient.saveCustomer(customer);
-        return  customerNew;
-    }
-
-    public List<Customer> getCustomerId (Long userId){
-        List<Customer> customer = custmomerFeingClient.getCustomerId(userId);
-        return  customer;
-    }
 
 }

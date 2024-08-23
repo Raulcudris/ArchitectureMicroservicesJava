@@ -4,9 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-//@FeignClient(name = "Customer-Services")
-//@RequestMapping("/customer")
-@FeignClient(name = "Customer-Services", url = "http://localhost:8080/customer")
+@FeignClient(name = "Customer-Services")
+@RequestMapping("/customer")
 public interface CustmomerFeingClient {
     @PostMapping("/create")
     Customer saveCustomer(@RequestBody Customer customer);
