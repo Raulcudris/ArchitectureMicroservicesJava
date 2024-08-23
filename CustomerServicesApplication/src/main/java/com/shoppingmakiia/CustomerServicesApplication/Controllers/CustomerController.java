@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class CustomerController {
      @Autowired
      CustomerService customerService;
-
     @GetMapping("getall")
     public List<CustomerDto> getAll(){
         return customerService.getAll().stream()

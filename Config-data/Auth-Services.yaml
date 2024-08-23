@@ -16,6 +16,10 @@ eureka:
       - 
         uri: "/customer/{1}[0-9]+"
         method: "GET"
+      - 
+        uri: "/customer/getall"
+        method: "GET"
+
 
 
 #admin-paths:
