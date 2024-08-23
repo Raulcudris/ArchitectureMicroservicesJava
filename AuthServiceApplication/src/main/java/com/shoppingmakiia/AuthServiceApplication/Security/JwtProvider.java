@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +17,12 @@ public class JwtProvider {
     private String secret;
 
     @Autowired
-    RouteValidator routeValidator;
+    private RouteValidator routeValidator;
 
     @PostConstruct
     protected void init() {
-        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        // No es necesario codificar la clave secreta en Base64
+        // secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
     public String createToken(AuthRequest authRequest) {
@@ -31,54 +31,60 @@ public class JwtProvider {
         claims.put("role", authRequest.getRole());
 
         Date now = new Date();
-        Date exp = new Date(now.getTime() + 3600000);
+        Date exp = new Date(now.getTime() + 3600000); // 1 hora
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes()) // Usa la clave en formato byte[]
                 .compact();
     }
 
     public boolean validate(String token, RequestDto dto) {
         try {
-            Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
-        } catch (SignatureException e) {
-            return false;
-        } catch (MalformedJwtException e) {
-            return false;
-        } catch (ExpiredJwtException e) {
-            return false;
-        } catch (UnsupportedJwtException e) {
-            return false;
-        } catch (IllegalArgumentException e) {
+            // Usa parseClaimsJws para tokens firmados
+            Jwts.parser()
+                    .setSigningKey(secret.getBytes())
+                    .parseClaimsJws(token);
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
+                 UnsupportedJwtException | IllegalArgumentException e) {
+            // Manejo de excepciones específicas
             return false;
         }
+
+        // Verifica si el usuario es administrador y si la ruta requiere permisos de admin
         if (!isAdmin(token) && routeValidator.isAdminPath(dto)) {
             return false;
         }
         return true;
-
     }
 
     public String getUserNameFromToken(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secret)
+                    .setSigningKey(secret.getBytes()) // Usa la clave en formato byte[]
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
-        } catch (Exception e) {
+        } catch (JwtException e) {
+            // Manejo de excepciones específicas para JWT
             return "bad token";
         }
     }
 
-    private boolean isAdmin(String token){
-        return Jwts.parser().
-                setSigningKey(secret).
-                parseClaimsJwt(token).
-                getBody().
-                get("role").
-                equals("admin");
-    }}
+    private boolean isAdmin(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secret.getBytes()) // Usa la clave en formato byte[]
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String role = (String) claims.get("role");
+            return "admin".equals(role);
+        } catch (JwtException e) {
+            // Manejo de excepciones específicas para JWT
+            return false;
+        }
+    }
+}
