@@ -1,9 +1,7 @@
 package com.shoppingmakiia.AuthServiceApplication.Security;
 import com.shoppingmakiia.AuthServiceApplication.Dto.RequestDto;
 import com.shoppingmakiia.AuthServiceApplication.Entity.AuthRequest;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,29 +42,24 @@ public class JwtProvider {
     }
 
     public boolean validate(String token, RequestDto dto) {
-       /* try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            if (!isAdmin(token) && routeValidator.isAdminPath(dto)) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception e) {
+        try {
+            Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
+        } catch (SignatureException e) {
             return false;
-        }*/
-        try{
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-        }catch (Exception e){
+        } catch (MalformedJwtException e) {
+            return false;
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (UnsupportedJwtException e) {
+            return false;
+        } catch (IllegalArgumentException e) {
             return false;
         }
-        if(!isAdmin(token) && routeValidator.isAdminPath(dto)){
-            return  false;
+        if (!isAdmin(token) && routeValidator.isAdminPath(dto)) {
+            return false;
         }
         return true;
+
     }
 
     public String getUserNameFromToken(String token) {
