@@ -16,6 +16,7 @@ public class CustomerService {
     @Autowired
     CustmomerFeingClient custmomerFeingClient;
 
+
     public List<Customer> getAll(){
         return  customerRepository.findAll();
     }
@@ -35,8 +36,14 @@ public class CustomerService {
         return  customers;
     }
 
-    public  Customer saveCustomerFeingClient(Customer customer){
+    public Customer saveCustomerFeingClient(Customer customer){
         Customer customerNew = custmomerFeingClient.saveCustomer(customer);
         return  customerNew;
     }
+
+    public List<Customer> getCustomerId (Long userId){
+        List<Customer> customer = custmomerFeingClient.getCustomerId(userId);
+        return  customer;
+    }
+
 }
