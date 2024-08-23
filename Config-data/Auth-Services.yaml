@@ -12,7 +12,7 @@ eureka:
     paths:
       - uri: "/customer/create/"
         method: "POST"
-      - uri: "/customer/{1}"
+      - uri: "/customer/{1}[0-9]+"
         method: "GET"
 
 

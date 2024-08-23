@@ -19,11 +19,4 @@ jwt:
   #secret: 7639848111F24212121B445421S545125D4212S5451A51115155151100000055051
   #timeExpiration: 604800
 
-admin-paths:
-  paths:
-    -
-      uri: "/customer/create"
-      method: "POST"
-    -
-      uri: "/customer/{1}"
-      method: "GET"
+
