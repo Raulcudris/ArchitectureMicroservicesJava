@@ -16,7 +16,6 @@ public class CustomerService {
     @Autowired
     CustmomerFeingClient custmomerFeingClient;
 
-
     public List<Customer> getAll(){
         return  customerRepository.findAll();
     }
