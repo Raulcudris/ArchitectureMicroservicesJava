@@ -10,11 +10,9 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   admin-paths:
     paths:
-      -
-        uri: "/customer/create/"
+      - uri: "/customer/create/"
         method: "POST"
-      -
-        uri: "/customer/{1}"
+      - uri: "/customer/{1}"
         method: "GET"
 
 
