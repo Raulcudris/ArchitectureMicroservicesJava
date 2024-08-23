@@ -11,7 +11,7 @@ eureka:
   admin-paths:
     paths:
       - 
-        uri: "/customer/create/"
+        uri: "/customer/"
         method: "POST"
       - 
         uri: "/customer/{1}[0-9]+"
