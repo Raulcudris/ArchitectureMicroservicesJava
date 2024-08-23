@@ -29,7 +29,6 @@ public class JwtProvider {
 
     public String createToken(AuthRequest authRequest) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", authRequest.getUsername());
         claims.put("id", authRequest.getId());
         claims.put("role", authRequest.getRole());
 
@@ -46,19 +45,14 @@ public class JwtProvider {
 
     public boolean validate(String token, RequestDto dto) {
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            if (!isAdmin(claims) && routeValidator.isAdminPath(dto)) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception e) {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+        }catch (Exception e){
             return false;
         }
+        if(!isAdmin(token) && routeValidator.isAdminPath(dto))
+            return false;
+        return true;
+
     }
 
     public String getUserNameFromToken(String token) {
@@ -73,7 +67,13 @@ public class JwtProvider {
         }
     }
 
-    private boolean isAdmin(Claims claims) {
-        return "admin".equals(claims.get("role"));
+    private boolean isAdmin(String token){
+        return Jwts.parser().
+                setSigningKey(secret).
+                parseClaimsJwt(token).
+                getBody().
+                get("role").
+                equals("admin");
     }
+
 }
