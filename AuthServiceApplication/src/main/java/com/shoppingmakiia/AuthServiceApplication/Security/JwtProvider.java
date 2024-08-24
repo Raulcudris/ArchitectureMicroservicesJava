@@ -1,11 +1,14 @@
 package com.shoppingmakiia.AuthServiceApplication.Security;
 import com.shoppingmakiia.AuthServiceApplication.Dto.RequestDto;
 import com.shoppingmakiia.AuthServiceApplication.Entity.AuthRequest;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,74 +20,60 @@ public class JwtProvider {
     private String secret;
 
     @Autowired
-    private RouteValidator routeValidator;
+    RouteValidator routeValidator;
 
     @PostConstruct
     protected void init() {
-        // No es necesario codificar la clave secreta en Base64
-        // secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
     public String createToken(AuthRequest authRequest) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", authRequest.getUsername());
         claims.put("id", authRequest.getId());
         claims.put("role", authRequest.getRole());
 
         Date now = new Date();
-        Date exp = new Date(now.getTime() + 3600000); // 1 hora
+        Date exp = new Date(now.getTime() + 3600000);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS256, secret.getBytes()) // Usa la clave en formato byte[]
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     public boolean validate(String token, RequestDto dto) {
         try {
-            // Usa parseClaimsJws para tokens firmados
-            Jwts.parser()
-                    .setSigningKey(secret.getBytes())
-                    .parseClaimsJws(token);
-        } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
-                 UnsupportedJwtException | IllegalArgumentException e) {
-            // Manejo de excepciones específicas
-            return false;
-        }
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        // Verifica si el usuario es administrador y si la ruta requiere permisos de admin
-        if (!isAdmin(token) && routeValidator.isAdminPath(dto)) {
+            if (!isAdmin(claims) && routeValidator.isAdminPath(dto)) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        return true;
     }
 
     public String getUserNameFromToken(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secret.getBytes()) // Usa la clave en formato byte[]
+                    .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
-        } catch (JwtException e) {
-            // Manejo de excepciones específicas para JWT
+        } catch (Exception e) {
             return "bad token";
         }
     }
 
-    private boolean isAdmin(String token) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret.getBytes()) // Usa la clave en formato byte[]
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String role = (String) claims.get("role");
-            return "admin".equals(role);
-        } catch (JwtException e) {
-            // Manejo de excepciones específicas para JWT
-            return false;
-        }
+    private boolean isAdmin(Claims claims) {
+        return "admin".equals(claims.get("role"));
     }
 }
